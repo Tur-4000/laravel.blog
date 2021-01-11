@@ -3,7 +3,6 @@
 /public/storage
 /public/assets
 /storage/*.key
-/storage
 /vendor
 .idea
 .env
