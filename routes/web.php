@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\MainController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\TagController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,5 +25,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::resource('/categories', CategoryController::class)
         ->except(['show'])
         ->names('admin.categories');
+    Route::resource('/tags', TagController::class)
+        ->except(['show'])
+        ->names('admin.tags');
 });
 
