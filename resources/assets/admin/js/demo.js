@@ -7,6 +7,14 @@
 (function ($) {
   'use strict'
 
+  //Initialize Select2 Elements
+  $('.select2').select2()
+
+    //Initialize Select2 Elements
+    // $('.select2bs4').select2({
+    //     theme: 'bootstrap4'
+    // })
+
   var $sidebar   = $('.control-sidebar')
   var $container = $('<div />', {
     class: 'p-3 control-sidebar-content'
