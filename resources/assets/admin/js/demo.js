@@ -432,3 +432,8 @@
     $(this).addClass('active');
   });
 })(jQuery)
+
+
+$(document).ready(function () {
+    bsCustomFileInput.init();
+});
