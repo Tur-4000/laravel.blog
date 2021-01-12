@@ -47,7 +47,15 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request)
     {
-        dd($request->all());
+        $data = $request->all();
+//        dd($data);
+        if ($request->hasFile('thumbnail')) {
+            $folder = date('Y-m-d');
+            $data['thumbnail'] = $request->file('thumbnail')->store("images/{$folder}");
+        }
+
+        $post = Post::create($data);
+        $post->tags()->sync($request->tags);
 
         return redirect()->route('admin.posts.index')->with('success', 'Статья добавлена');
     }
