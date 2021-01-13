@@ -21,7 +21,7 @@ class PostController extends Controller
     public function index()
     {
         $title = 'Статьи';
-        $posts = Post::paginate();
+        $posts = Post::with('category', 'tags')->paginate();
 
         return view('admin.posts.index', compact('title', 'posts'));
     }
