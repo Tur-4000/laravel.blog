@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -48,11 +49,7 @@ class PostController extends Controller
     public function store(StorePostRequest $request)
     {
         $data = $request->all();
-//        dd($data);
-        if ($request->hasFile('thumbnail')) {
-            $folder = date('Y-m-d');
-            $data['thumbnail'] = $request->file('thumbnail')->store("images/{$folder}");
-        }
+        $data['thumbnail'] = Post::uploadImage($request);
 
         $post = Post::create($data);
         $post->tags()->sync($request->tags);
@@ -70,8 +67,10 @@ class PostController extends Controller
     {
         $title = 'Статьи';
         $post = Post::findOrFail($id);
+        $categories = Category::pluck('title', 'id')->all();
+        $tags = Tag::pluck('title', 'id')->all();
 
-        return view('admin.posts.edit', compact('title', 'post'));
+        return view('admin.posts.edit', compact('title', 'post', 'categories', 'tags'));
     }
 
     /**
@@ -83,6 +82,13 @@ class PostController extends Controller
      */
     public function update(UpdatePostRequest $request, $id)
     {
+        $post = Post::findOrFail($id);
+        $data = $request->all();
+        $data['thumbnail'] = Post::uploadImage($request, $post->thumbnail);
+
+        $post->update($data);
+        $post->tags()->sync($request->tags);
+
         return redirect()->route('admin.posts.index')->with('success', 'Статья изменена');
     }
 
@@ -95,6 +101,8 @@ class PostController extends Controller
     public function destroy($id)
     {
         $post = Post::findOrFail($id);
+        $post->tags()->sync([]);
+        Storage::delete($post->thumbnail);
         $post->delete();
 
         return redirect()->route('admin.posts.index')->with('success', 'Статья удалена');
