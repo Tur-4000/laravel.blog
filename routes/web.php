@@ -37,3 +37,7 @@ Route::group(['prefix' => 'admin'], function () {
 
 Route::get('/register', [UserController::class, 'create'])->name('register.create');
 Route::post('/register', [UserController::class, 'store'])->name('register.store');
+
+Route::get('/login', [UserController::class, 'loginForm'])->name('login.form');
+Route::post('/login', [UserController::class, 'login'])->name('login');
+Route::get('/logout', [UserController::class, 'logout'])->name('logout');
